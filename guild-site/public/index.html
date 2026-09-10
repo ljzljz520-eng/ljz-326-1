@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>星尘公会 STARDUST GUILD · 2026 春季招募</title>
+  <meta name="description" content="星尘公会 2026 春季招募：公会介绍、活动时间、成员作品与加入条件，欢迎提交申请。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <a class="brand" href="#top">
+      <span class="brand-logo" data-sprite="shield" data-scale="2"></span>
+      <span class="brand-text">星尘公会<small>STARDUST GUILD</small></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="页面导航">
+      <a href="#about">介绍</a>
+      <a href="#schedule">活动</a>
+      <a href="#gallery">作品</a>
+      <a href="#requirements">条件</a>
+      <a href="#apply" class="nav-cta">申请</a>
+      <a href="#status">查询</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- 首屏 -->
+    <section class="hero" id="hero">
+      <div class="hero-inner">
+        <p class="hero-badge blink">◆ 2026 春季招募中 ◆</p>
+        <h1 class="hero-title">星尘公会</h1>
+        <p class="hero-sub">STARDUST GUILD</p>
+        <p class="hero-tag">在像素与星光之间，和靠谱的人一起冒险。</p>
+        <div class="hero-btns">
+          <a class="px-btn" href="#apply">▶ 立即申请</a>
+          <a class="px-btn ghost" href="#about">了解公会</a>
+        </div>
+        <ul class="hero-chips">
+          <li>成立于 2019</li>
+          <li>现有成员 <b id="memberCount">47</b> 人</li>
+          <li>团本进度 12/12</li>
+          <li>每周活动 6 场</li>
+        </ul>
+      </div>
+      <div class="hero-sprite slime" data-sprite="slime" data-scale="7" aria-hidden="true"></div>
+      <div class="hero-sprite ghost" data-sprite="ghost" data-scale="5" aria-hidden="true"></div>
+      <a class="scroll-hint blink" href="#about" aria-label="向下滚动">▼</a>
+    </section>
+
+    <!-- 公会介绍 -->
+    <section id="about" class="section">
+      <div class="sec-title"><span class="sec-en">GUILD INFO</span><h2>公会介绍</h2></div>
+      <div class="dialog">
+        <span class="dialog-tag">公会公告 · NOTICE</span>
+        <p>星尘公会成立于 2019 年，从最初的 8 人小队，一路打进服务器首杀榜前三。我们既冲进度，也享受生活——团本、竞技场、钓鱼大赛、截图接龙，总有一款适合你。</p>
+        <p>这里没有小团体，也没有强制社交：新人进会第一周有专属导师带本，装备分配公开透明，活动出勤全凭自愿。但我们希望——你答应出现的时候，一定出现。</p>
+        <span class="dialog-next blink" aria-hidden="true">▼</span>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card px-panel"><span class="stat-num">7</span><span class="stat-label">年 · 公会历史</span><span class="stat-en">SINCE 2019</span></div>
+        <div class="stat-card px-panel"><span class="stat-num"><span id="memberCount2">47</span>+</span><span class="stat-label">现有成员</span><span class="stat-en">MEMBERS</span></div>
+        <div class="stat-card px-panel"><span class="stat-num">12/12</span><span class="stat-label">团本进度</span><span class="stat-en">RAID PROGRESS</span></div>
+        <div class="stat-card px-panel"><span class="stat-num">6</span><span class="stat-label">每周活动</span><span class="stat-en">WEEKLY EVENTS</span></div>
+      </div>
+    </section>
+
+    <!-- 活动时间 -->
+    <section id="schedule" class="section">
+      <div class="sec-title"><span class="sec-en">QUEST BOARD</span><h2>活动时间</h2></div>
+      <div class="px-panel table-wrap">
+        <table class="px-table">
+          <thead>
+            <tr><th>星期</th><th>时间</th><th>内容</th><th>类型</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>周二</td><td>20:00 – 22:00</td><td>团本开荒 · 进度团</td><td><span class="tag tag-raid">团本</span></td></tr>
+            <tr><td>周三</td><td>21:00 – 22:30</td><td>竞技场 3v3 冲分</td><td><span class="tag tag-pvp">PvP</span></td></tr>
+            <tr><td>周四</td><td>20:30 – 22:00</td><td>团本速推 · Farm 团</td><td><span class="tag tag-raid">团本</span></td></tr>
+            <tr><td>周五</td><td>21:00 – 23:00</td><td>公会领地战</td><td><span class="tag tag-pvp">PvP</span></td></tr>
+            <tr><td>周六</td><td>15:00 – 17:00</td><td>新人教学 · 带新副本</td><td><span class="tag tag-new">新人</span></td></tr>
+            <tr><td>周六</td><td>20:00 – 23:00</td><td>大型团本 · 全员活动</td><td><span class="tag tag-raid">团本</span></td></tr>
+            <tr><td>周日</td><td>20:00 – 21:30</td><td>休闲活动 · 钓鱼 / 截图大赛</td><td><span class="tag tag-fun">休闲</span></td></tr>
+            <tr><td>周一</td><td>—</td><td>休息日 · 自由安排</td><td><span class="tag tag-rest">休息</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="section-note">◆ 以上均为服务器时间（UTC+8）；节假日特别活动以公会群公告为准。</p>
+    </section>
+
+    <!-- 成员作品 -->
+    <section id="gallery" class="section">
+      <div class="sec-title"><span class="sec-en">MEMBER WORKS</span><h2>成员作品</h2></div>
+      <div class="gallery-grid">
+        <figure class="work-card px-panel">
+          <div class="art" data-sprite="slime" data-scale="9"></div>
+          <figcaption>
+            <h3>果冻守卫</h3>
+            <p class="work-author">BY 月见里</p>
+            <p class="work-desc">公会吉祥物，原型据说是会长第一次团灭时遇到的小怪。</p>
+          </figcaption>
+        </figure>
+        <figure class="work-card px-panel">
+          <div class="art" data-sprite="castle" data-scale="9"></div>
+          <figcaption>
+            <h3>星尘要塞</h3>
+            <p class="work-author">BY 建筑狂魔阿砖</p>
+            <p class="work-desc">生存服耗时三个月盖起来的公会主城，欢迎来参观。</p>
+          </figcaption>
+        </figure>
+        <figure class="work-card px-panel">
+          <div class="art" data-sprite="potion" data-scale="9"></div>
+          <figcaption>
+            <h3>会长的私房药水</h3>
+            <p class="work-author">BY 奶糖布丁</p>
+            <p class="work-desc">据说喝了能在团本里多活三秒（并不能）。</p>
+          </figcaption>
+        </figure>
+        <figure class="work-card px-panel">
+          <div class="art" data-sprite="chest" data-scale="9"></div>
+          <figcaption>
+            <h3>开不出货的宝箱</h3>
+            <p class="work-author">BY 铁头娃</p>
+            <p class="work-desc">上周团本掉落实录，懂的都懂。</p>
+          </figcaption>
+        </figure>
+        <figure class="work-card px-panel">
+          <div class="art" data-sprite="ghost" data-scale="9"></div>
+          <figcaption>
+            <h3>凌晨三点的队友</h3>
+            <p class="work-author">BY 影之歌</p>
+            <p class="work-desc">深夜档玩家的真实写照。</p>
+          </figcaption>
+        </figure>
+        <figure class="work-card px-panel">
+          <div class="art" data-sprite="mushroom" data-scale="9"></div>
+          <figcaption>
+            <h3>红伞伞</h3>
+            <p class="work-author">BY 小蘑菇</p>
+            <p class="work-desc">生活玩家的采集日常，请勿食用。</p>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 加入条件 -->
+    <section id="requirements" class="section">
+      <div class="sec-title"><span class="sec-en">JOIN US</span><h2>加入条件</h2></div>
+      <div class="req-grid">
+        <div class="px-panel req-box">
+          <h3><span class="req-icon">✦</span>招募条件</h3>
+          <ol class="req-list">
+            <li><b>01</b><span>当前版本满级（80 级），主号装等 520 以上</span></li>
+            <li><b>02</b><span>每周至少参加 1 次公会活动，有事可提前请假</span></li>
+            <li><b>03</b><span>活动时语音在线（只听不说也可以）</span></li>
+            <li><b>04</b><span>友善沟通，不喷人、不挂机，遵守公会公约</span></li>
+            <li><b>05</b><span>认同公开透明的装备分配规则</span></li>
+          </ol>
+        </div>
+        <div class="px-panel req-box">
+          <h3><span class="req-icon">▶</span>招募流程</h3>
+          <ol class="step-list">
+            <li><b>STEP 1</b><div><strong>提交申请</strong><p>填写下方表单，1～3 天内完成审核</p></div></li>
+            <li><b>STEP 2</b><div><strong>游戏内面试</strong><p>官员私聊简单聊聊，不考试！</p></div></li>
+            <li><b>STEP 3</b><div><strong>试训一周</strong><p>跟一次团本或活动，互相了解</p></div></li>
+            <li><b>STEP 4</b><div><strong>正式成员</strong><p>分配专属导师，解锁全部公会福利</p></div></li>
+          </ol>
+        </div>
+      </div>
+      <p class="section-note">◆ 回归玩家与小号可申请「见习成员」通道，条件适当放宽，转正后享受同等福利。</p>
+    </section>
+
+    <!-- 申请表单 -->
+    <section id="apply" class="section">
+      <div class="sec-title"><span class="sec-en">JOIN QUEST</span><h2>立即申请</h2></div>
+      <div class="px-panel form-panel" id="formPanel">
+        <form id="applyForm" novalidate>
+          <div class="field">
+            <label for="fName">▸ 角色名 <span class="req-star">*</span></label>
+            <input class="px-input" id="fName" name="characterName" maxlength="16" placeholder="游戏内的角色名（2-16 个字符）" autocomplete="off">
+            <p class="field-err" id="errName"></p>
+          </div>
+          <div class="field">
+            <span class="field-label" id="classLabel">▸ 常玩职业 <span class="req-star">*</span></span>
+            <div class="class-grid" id="classGrid" role="radiogroup" aria-labelledby="classLabel"></div>
+            <p class="field-err" id="errClass"></p>
+          </div>
+          <div class="field">
+            <span class="field-label" id="slotLabel">▸ 在线时段 <span class="req-star">*</span> <small>（可多选，方便我们安排活动）</small></span>
+            <div class="chip-grid" id="slotGrid" aria-labelledby="slotLabel"></div>
+            <p class="field-err" id="errSlots"></p>
+          </div>
+          <div class="field">
+            <label for="fIntro">▸ 自我介绍 <span class="req-star">*</span></label>
+            <textarea class="px-input" id="fIntro" rows="6" maxlength="500" placeholder="20-500 字：主玩内容、装备水平、为什么想加入我们……"></textarea>
+            <div class="field-foot">
+              <p class="field-err" id="errIntro"></p>
+              <span class="counter" id="introCount">0 / 500</span>
+            </div>
+          </div>
+          <button type="submit" class="px-btn btn-submit" id="submitBtn">▶ 提交申请</button>
+          <p class="form-note">提交即表示同意官员在审核期间通过游戏内私聊联系你；信息仅用于本次招募。</p>
+        </form>
+      </div>
+      <div class="px-panel success-panel" id="successPanel" hidden>
+        <p class="success-title">✦ 任务接取成功！✦</p>
+        <p class="success-id">申请编号<b id="successId">A1001</b></p>
+        <p class="success-desc">审核预计 1～3 天。结果可在下方「进度查询」查看，<br>请保持游戏内私聊畅通。</p>
+        <div class="success-btns">
+          <a class="px-btn" href="#status" id="goStatus">查询进度</a>
+          <button class="px-btn ghost" id="againBtn" type="button">再填一份</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 进度查询 -->
+    <section id="status" class="section">
+      <div class="sec-title"><span class="sec-en">QUEST LOG</span><h2>进度查询</h2></div>
+      <div class="px-panel form-panel">
+        <form id="statusForm" class="status-form">
+          <input class="px-input" id="qName" maxlength="16" placeholder="输入你的角色名" autocomplete="off" aria-label="角色名">
+          <button class="px-btn" type="submit">查询</button>
+        </form>
+        <div id="statusResult" class="status-result"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>星尘公会 STARDUST GUILD · 招募站</p>
+    <p class="footer-sub">手工像素 · 用心招募 ｜ <a href="/admin.html">管理端入口</a></p>
+  </footer>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="js/sprites.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

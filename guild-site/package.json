@@ -1,0 +1,13 @@
+{
+  "name": "stardust-guild-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "星尘公会 · 像素风公会招募站（访客展示 + 申请提交 + 管理端审核）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
