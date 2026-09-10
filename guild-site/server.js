@@ -56,6 +56,20 @@ function saveDB() {
 }
 
 // 首次启动写入示例申请，方便立刻体验审核流程
+function migrateDB() {
+  // 旧数据没有查询码：为历史申请补签，保证状态查询鉴权一致
+  let changed = false;
+  for (const it of db.items) {
+    if (typeof it.queryToken !== 'string' || it.queryToken.length < 16) {
+      it.queryToken = crypto.randomBytes(16).toString('hex');
+      changed = true;
+    }
+  }
+  if (changed) saveDB();
+}
+migrateDB();
+
+// 首次启动写入示例申请，方便立刻体验审核流程
 function seedIfEmpty() {
   if (db.items.length > 0) return;
   const now = Date.now();
@@ -81,6 +95,7 @@ function seedIfEmpty() {
       intro: s.intro,
       status: s.status,
       note: s.note || '',
+      queryToken: crypto.randomBytes(16).toString('hex'),
       createdAt: new Date(now + s.age).toISOString(),
       reviewedAt: s.status === 'pending' ? null : new Date(now + s.age + 5 * H).toISOString()
     });
@@ -227,7 +242,8 @@ function publicItem(it) {
   return {
     id: it.id, characterName: it.characterName, classId: it.classId,
     timeSlots: it.timeSlots, intro: it.intro, status: it.status,
-    note: it.note, createdAt: it.createdAt, reviewedAt: it.reviewedAt
+    note: it.note, queryToken: it.queryToken,
+    createdAt: it.createdAt, reviewedAt: it.reviewedAt
   };
 }
 
@@ -238,12 +254,20 @@ async function handleApi(req, res, url, pathname) {
 
   // 提交申请
   if (req.method === 'POST' && pathname === '/api/applications') {
-    if (!rateLimit('sub:' + ip, 5, 10 * 60 * 1000)) {
-      return sendJSON(res, 429, { error: '提交太频繁了，请 10 分钟后再试' });
+    // 宽松限流：防止恶意刷请求体 / 刷接口（字段不合法的请求也计入）
+    if (!rateLimit('sub-try:' + ip, 30, 10 * 60 * 1000)) {
+      return sendJSON(res, 429, { error: '请求过于频繁，请 10 分钟后再试' });
     }
     const body = await readJsonBody(req);
     const { errors, value } = validateApplication(body);
+    // 先返回字段错误，且不消耗正式提交额度——
+    // 否则访客修正无效表单（例如自我介绍不足 20 字）连续几次后，
+    // 合法提交反而会收到 429，而不是字段错误或正常受理
     if (errors.length) return sendJSON(res, 400, { error: errors[0], errors });
+    // 字段校验通过后才消耗正式提交限流额度
+    if (!rateLimit('sub:' + ip, 5, 10 * 60 * 1000)) {
+      return sendJSON(res, 429, { error: '提交太频繁了，请 10 分钟后再试' });
+    }
     // 同名且未被拒绝的申请 → 拦截重复提交
     const dup = db.items.find(it =>
       it.characterName.toLowerCase() === value.characterName.toLowerCase() && it.status !== 'rejected'
@@ -256,25 +280,37 @@ async function handleApi(req, res, url, pathname) {
       ...value,
       status: 'pending',
       note: '',
+      // 随机查询码：仅凭角色名无法查询他人申请，状态查询需同时提供本码
+      queryToken: crypto.randomBytes(16).toString('hex'),
       createdAt: new Date().toISOString(),
       reviewedAt: null
     };
     db.items.push(item);
     saveDB();
-    return sendJSON(res, 201, { ok: true, id: item.id, createdAt: item.createdAt });
+    return sendJSON(res, 201, {
+      ok: true,
+      id: item.id,
+      queryToken: item.queryToken,
+      createdAt: item.createdAt
+    });
   }
 
-  // 查询申请状态
+  // 查询申请状态（需角色名 + 提交时签发的查询码，防止仅凭角色名枚举他人申请与留言）
   if (req.method === 'GET' && pathname === '/api/applications/status') {
     if (!rateLimit('st:' + ip, 30, 60 * 1000)) {
       return sendJSON(res, 429, { error: '查询太频繁了，请稍后再试' });
     }
     const name = (url.searchParams.get('name') || '').trim();
-    if (!name) return sendJSON(res, 400, { error: '请输入角色名' });
+    const token = (url.searchParams.get('code') || '').trim();
+    if (!name || !token) return sendJSON(res, 400, { error: '请输入角色名和查询码' });
     const found = [...db.items].reverse().find(
       it => it.characterName.toLowerCase() === name.toLowerCase()
     );
-    if (!found) return sendJSON(res, 200, { found: false });
+    // 恒定时间比较；查无此人 / 查询码错误返回完全一致的响应，避免泄露角色名是否存在
+    const expected = found && typeof found.queryToken === 'string' ? found.queryToken : '';
+    if (!found || !timingSafeEqual(token, expected)) {
+      return sendJSON(res, 200, { found: false });
+    }
     return sendJSON(res, 200, {
       found: true,
       id: found.id,

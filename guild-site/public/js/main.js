@@ -165,6 +165,7 @@
 
   var form = $('#applyForm');
   var submitBtn = $('#submitBtn');
+  var lastQuery = { name: '', code: '' };
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var d = {
@@ -185,7 +186,9 @@
       return r.json().then(function (j) { return { ok: r.ok, body: j }; });
     }).then(function (res) {
       if (res.ok) {
+        lastQuery = { name: d.characterName, code: res.body.queryToken || '' };
         $('#successId').textContent = res.body.id;
+        $('#successCode').textContent = res.body.queryToken || '—';
         $('#formPanel').hidden = true;
         var sp = $('#successPanel');
         sp.hidden = false;
@@ -214,7 +217,8 @@
   });
 
   $('#goStatus').addEventListener('click', function () {
-    $('#qName').value = $('#fName').value.trim();
+    $('#qName').value = lastQuery.name || $('#fName').value.trim();
+    $('#qCode').value = lastQuery.code || '';
   });
 
   /* ---------- 进度查询 ---------- */
@@ -226,16 +230,17 @@
   $('#statusForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var name = $('#qName').value.trim();
+    var code = $('#qCode').value.trim();
     var box = $('#statusResult');
-    if (!name) { toast('请输入角色名', 'error'); return; }
+    if (!name || !code) { toast('请输入角色名和查询码', 'error'); return; }
     box.innerHTML = '<p class="loading">◌ 查询中…</p>';
-    fetch('/api/applications/status?name=' + encodeURIComponent(name))
+    fetch('/api/applications/status?name=' + encodeURIComponent(name) + '&code=' + encodeURIComponent(code))
       .then(function (r) { return r.json(); })
       .then(function (j) {
         if (j.error) { box.innerHTML = ''; toast(j.error, 'error'); return; }
         if (!j.found) {
-          box.innerHTML = '<div class="status-card"><h3>没有找到「' + esc(name) + '」的申请记录</h3>' +
-            '<p>确认角色名是否输入正确；还没有申请的话，快去上方提交吧！</p></div>';
+          box.innerHTML = '<div class="status-card"><h3>角色名或查询码不正确，未找到申请记录</h3>' +
+            '<p>请核对角色名与提交成功后获得的查询码；查询码仅申请时展示一次。</p></div>';
           return;
         }
         var st = STATUS_MAP[j.status] || STATUS_MAP.pending;

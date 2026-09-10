@@ -157,6 +157,7 @@
       '<div class="app-meta">' +
         '<span class="app-icon" title="' + esc(c.name) + '">' + spriteSVG(c.sprite, 2) + '</span>' +
         '<span>◷ ' + esc(fmtTime(it.createdAt)) + '</span>' +
+        (it.queryToken ? '<span class="app-code" title="申请人查询进度所需的查询码">查询码 ' + esc(it.queryToken) + '</span>' : '') +
         slots +
       '</div>' +
       '<p class="app-intro">' + esc(it.intro) + '</p>';
